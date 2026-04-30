@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ec.edu.uisek.calculator.ui.theme.Purple40
 import ec.edu.uisek.calculator.ui.theme.Purple80
+import ec.edu.uisek.calculator.ui.theme.Red
 import ec.edu.uisek.calculator.ui.theme.UiSekBlue
 
 @Composable
@@ -89,10 +90,11 @@ fun CalculatorGrid(onEvent: (CalculatorEvent)-> Unit) {
                     in "0".."9" -> onEvent(CalculatorEvent.Number(number = label))
                     "." -> onEvent(CalculatorEvent.Decimal)
                     "=" -> onEvent(CalculatorEvent.Calculate)
+                    else -> onEvent(CalculatorEvent.Operator(operator = label))
                 }
             }
         }
-        item(span = { GridItemSpan(currentLineSpan = 2) }) {
+        item(span = { GridItemSpan( currentLineSpan = 2) }) {
             CalculatorButton(label = "AC") {
                 onEvent(CalculatorEvent.AllClear)
             }
@@ -109,14 +111,14 @@ fun CalculatorGrid(onEvent: (CalculatorEvent)-> Unit) {
 fun CalculatorButton(label: String, onClick: () -> Unit) {
     Box (
         modifier = Modifier
-            .aspectRatio(1f)
+            .aspectRatio( ratio = if (label == "AC" || label == "C") 2f else 1f)
             .fillMaxSize()
             .clip(CircleShape)
-            .background(if (label in listOf("÷", "×", "−", "+", "=", "."))
-                Purple40
-                else
-                UiSekBlue
-            )
+            .background(color = when (label) {
+                in listOf("÷", "×", "−", "+", "=") -> Purple40
+                in listOf("AC", "C") -> Red
+                else -> UiSekBlue
+            })
             .clickable { onClick() },
         contentAlignment = Alignment.Center
     ){
