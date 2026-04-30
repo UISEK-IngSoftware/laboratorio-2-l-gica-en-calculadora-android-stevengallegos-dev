@@ -62,6 +62,9 @@ class CalculatorViewModel: ViewModel () {
 
     private fun enterOperator(operator: String) {
         if (number1.isNotBlank()) {
+            if (this.operator != null && number2.isNotBlank()) {
+                performCalculation()
+            }
             this.operator = operator
         }
     }
@@ -88,7 +91,7 @@ class CalculatorViewModel: ViewModel () {
         if (num1 != null && num2 != null && operator != null) {
             val result = when (operator) {
                 "+" -> num1 + num2
-                "-" -> num1 - num2
+                "−" -> num1 - num2
                 "×" -> num1 * num2
                 "÷" -> if (num2 != 0.0) num1 / num2 else Double.NaN
                 else -> 0.0
